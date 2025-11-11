@@ -5,7 +5,6 @@ from langchain_core.messages import AIMessage
 st.set_page_config(page_title="MCP POC", page_icon="🤖", layout="wide")
 st.title("Model Context Protocol(MCP) - Learning Path Generator")
 
-# Initialize session state for progress
 if 'current_step' not in st.session_state:
     st.session_state.current_step = ""
 if 'progress' not in st.session_state:
@@ -15,15 +14,12 @@ if 'last_section' not in st.session_state:
 if 'is_generating' not in st.session_state:
     st.session_state.is_generating = False
 
-# Sidebar for API and URL configuration
 st.sidebar.header("Configuration")
 st.sidebar.subheader("Pipedream URLs")
 youtube_pipedream_url = st.sidebar.text_input("YouTube URL (Required)", placeholder="Enter your Pipedream YouTube URL")
 
-# Secondary tool selection
 secondary_tool = st.sidebar.radio("Select Secondary Tool:", ["Drive", "Notion"])
 
-# Secondary tool URL input
 if secondary_tool == "Drive":
     drive_pipedream_url = st.sidebar.text_input("Drive URL", placeholder="Enter your Pipedream Drive URL")
     notion_pipedream_url = None
@@ -31,7 +27,6 @@ else:
     notion_pipedream_url = st.sidebar.text_input("Notion URL", placeholder="Enter your Pipedream Notion URL")
     drive_pipedream_url = None
 
-# Quick guide before goal input
 st.info("""
 **Quick Guide:**
 1. Enter your YouTube URL (required)
@@ -109,12 +104,11 @@ if st.button("Generate Learning Path", type="primary", disabled=st.session_state
             st.header("Your Learning Path")
 
             if result:    
-                # Handle LangChain message-style output
                 if isinstance(result, dict) and "messages" in result:
                     ai_messages = [msg for msg in result["messages"] if isinstance(msg, AIMessage)]
                     
                     if ai_messages:
-                        content = ai_messages[-1].content  # Use last AIMessage
+                        content = ai_messages[-1].content 
                     
                     else:
                         content = str(result)
@@ -125,7 +119,6 @@ if st.button("Generate Learning Path", type="primary", disabled=st.session_state
                 else:
                     content = str(result)
 
-                    # Extract only the final answer (ignore <think> parts if any)
                 if "Here is your comprehensive" in content:
                     content = content.split("Here is your comprehensive", 1)[1]
                     content = "Here is your comprehensive" + content
